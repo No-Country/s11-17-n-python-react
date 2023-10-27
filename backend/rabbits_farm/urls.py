@@ -33,6 +33,7 @@ urlpatterns = [
     re_path(r"^api/", include("apps.farms.api.routers"), name="farms"),
     re_path(r"^api/", include("apps.cages.api.routers"), name="cages"),
     re_path(r"^api/", include("apps.profiles.api.routers"), name="profiles"),
+    re_path(r"^api/", include("apps.catalogs.api.routers"), name="catalogs"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     # Optional UI:
     path(

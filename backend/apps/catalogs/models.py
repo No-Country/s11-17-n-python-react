@@ -1,5 +1,17 @@
 from django.db import models
 from apps.abstracts.models import AbstractModel
+from django.http import Http404
+
+
+class StateManager(models.Manager):
+    def get_object_state_by_id(self, pk):
+        try:
+            instance = State.objects.get(pk=pk)
+            return instance
+
+        except State.DoesNotExist:
+            message = "State with the giving name does not exist"
+            raise Http404(message)
 
 
 # Create your models here.
@@ -22,6 +34,8 @@ class State(AbstractModel):
 
     state = models.CharField(max_length=25)
 
+    object_state = StateManager()
+
     class Meta:
         db_table = "states_catalog"
         verbose_name = "State"
@@ -32,11 +46,24 @@ class State(AbstractModel):
         return self.state
 
 
+class CityManager(models.Manager):
+    def get_object_by_city_id(self, pk):
+        try:
+            instance = City.objects.get(pk=pk)
+            return instance
+
+        except City.DoesNotExist:
+            message = "City with the giving name does not exist"
+            raise Http404(message)
+
+
 class City(AbstractModel):
     state = models.ForeignKey(
         State, on_delete=models.CASCADE, related_name="state_city"
     )
     city = models.CharField(max_length=100)
+
+    object_city = CityManager()
 
     class Meta:
         db_table = "cities_catalog"

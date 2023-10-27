@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from apps.cages.models import Cage
 
+
 class CageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cage
