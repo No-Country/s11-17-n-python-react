@@ -2,21 +2,22 @@ from django.db import models
 from apps.abstracts.models import AbstractModel
 from apps.catalogs.models import State, City
 
-
 # Create your models here.
 class Address(AbstractModel):
-    address = models.CharField(max_length=150)
-    state = models.ForeignKey(
-        State, on_delete=models.CASCADE, related_name="state_address"
-    )
-    city = models.ForeignKey(
-        City, on_delete=models.CASCADE, related_name="city_address"
-    )
+    """
+     The address is extended of profile data.
+    
+    Args:
+        state_id ( coolean ): prelated with state model
+        city_id ( float ): related with with city model
+        address ( str ): address of user
+        is_active ( boolean ): logic delete.
+    """
 
-    def __str__(self):
-        return self.address
-
+    state_id = models.ForeignKey(State, on_delete=models.CASCADE, related_name="state_address", null=True, blank=True)
+    city_id = models.ForeignKey(City, on_delete=models.CASCADE, related_name="city_address", null=True, blank=True)
+    address = models.CharField(max_length=150, null=True, blank=True)
+   
     class Meta:
-        db_table = "addresses"
-        verbose_name = "Direccion"
+        verbose_name = "Dirección"
         verbose_name_plural = "Direcciones"

@@ -3,7 +3,6 @@ import uuid
 from apps.users.models import User
 from apps.addresses.models import Address
 
-
 # Create your models here.
 class Profile(models.Model):
     """

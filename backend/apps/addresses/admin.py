@@ -6,14 +6,14 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "address",
-        "state",
-        "city",
+        "state_id",
+        "city_id",
     )
     search_fields = (
-        "state",
-        "city",
+        "state_id",
+        "city_id",
     )
-    ordering = ("city",)
+    ordering = ("city_id",)
 
 
 admin.site.register(Address, AddressAdmin)
