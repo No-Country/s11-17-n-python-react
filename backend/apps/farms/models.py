@@ -38,7 +38,11 @@ class Farm(AbstractModel):
         blank=True,
     )
     profile_id = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="profile_farm"
+        Profile,
+        on_delete=models.CASCADE,
+        related_name="profile_farm",
+        blank=True,
+        null=True,
     )
 
     # Modifica como se visualiza el nombre de la clase en el admin
