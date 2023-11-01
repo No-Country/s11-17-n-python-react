@@ -14,7 +14,6 @@ def get_upload_path(instance, filename):
     """
     return os.path.join("fotos", "perfiles", str(instance.pk), filename)
 
-
 # Create your models here.
 class Profile(models.Model):
     """

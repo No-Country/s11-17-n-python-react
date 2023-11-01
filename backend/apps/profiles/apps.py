@@ -7,3 +7,6 @@ class ProfilesConfig(AppConfig):
 
     class Meta:
         verbose_name = "Perfiles"
+
+    def ready(self):
+        from . import receivers

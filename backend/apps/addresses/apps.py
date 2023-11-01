@@ -2,6 +2,8 @@ from django.apps import AppConfig
 
 
 class AddressesConfig(AppConfig):
-    default_auto_field = "django.db.models.BigAutoField"
     name = "apps.addresses"
     label = "apps_addresses"
+
+    class Meta:
+        verbose_name = "Direcciones"
