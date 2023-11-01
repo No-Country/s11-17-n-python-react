@@ -7,7 +7,7 @@ from drf_spectacular.utils import extend_schema_view, extend_schema
 from utils.pagination import ExtendedPagination
 
 from apps.profiles.api.serializer import ProfileSerializer
-from apps.addresses.models import Address
+
 
 @extend_schema_view(
     list = extend_schema(description='permite listar los perfiles de usuario'),
