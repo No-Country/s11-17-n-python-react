@@ -2,6 +2,17 @@ from django.db import models
 import uuid
 from apps.users.models import User
 from apps.addresses.models import Address
+import os
+
+
+def get_upload_path(instance, filename):
+    """
+    This function is used to create a unique filename for each image uploaded to the server.
+    :param instance: The instance parameter is the model instance that the file is attached to.
+    :param filename: The filename parameter is the name of the file that was uploaded.
+    :return: The function returns a string containing the path where the file will be saved.
+    """
+    return os.path.join("fotos", "perfiles", str(instance.pk), filename)
 
 # Create your models here.
 class Profile(models.Model):
@@ -29,7 +40,7 @@ class Profile(models.Model):
     updated = models.DateTimeField(auto_now=True)
     photo = models.ImageField(
         "Profiles",
-        upload_to="fotos/perfiles/",
+        upload_to=get_upload_path,
         default="perfil.jpg",
         null=True,
         blank=True,

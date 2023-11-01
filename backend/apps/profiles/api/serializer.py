@@ -3,6 +3,7 @@ from apps.profiles.models import Profile
 from apps.addresses.api.serializer import AddressSerializer
 import re
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -26,3 +27,15 @@ class ProfileSerializer(serializers.ModelSerializer):
         if value >= 0 and value <= 5:
             return value
         raise serializers.ValidationError("La calificacion no puede ser inferior a cero ni mayor a 5")
+        fields = "__all__"
+
+
+class ProfilePhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ("photo",)
+
+    def update(self, instance, validated_data):
+        instance.photo = validated_data.get("photo", instance.photo)
+        instance.save()
+        return instance

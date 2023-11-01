@@ -32,7 +32,8 @@ class Login(TokenObtainPairView):
                     {
                         "token": login_serializer.validated_data.get("access"),
                         "refresh-token": login_serializer.validated_data.get("refresh"),
-                        "user": user_serializer.data,
+                        "user": user_serializer.data.get("username"),
+                        "id": user_serializer.data.get("id"),
                         "message": "Inicio de Sesión Exitoso.",
                     },
                     status=status.HTTP_200_OK,

@@ -1,8 +1,19 @@
 from django.db import models
 import uuid
 from apps.abstracts.models import AbstractModel
+import os
 
 # Create your models here.
+
+
+def get_upload_path(instance, filename):
+    """
+    This function is used to create a unique filename for each image uploaded to the server.
+    :param instance: The instance parameter is the model instance that the file is attached to.
+    :param filename: The filename parameter is the name of the file that was uploaded.
+    :return: The function returns a string containing the path where the file will be saved.
+    """
+    return os.path.join("fotos", "granjas", str(instance.pk), filename)
 
 
 class Farm(AbstractModel):
@@ -20,7 +31,7 @@ class Farm(AbstractModel):
     description = models.TextField(max_length=200)
     photo = models.ImageField(
         "Farms",
-        upload_to="fotos/granjas/",
+        upload_to=get_upload_path,
         default="granja.jpg",
         null=True,
         blank=True,

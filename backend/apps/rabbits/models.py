@@ -2,6 +2,17 @@ from django.db import models
 from apps.cages.models import Cage
 from apps.abstracts.models import AbstractModel
 from django.utils import timezone
+import os
+
+
+def get_upload_path(instance, filename):
+    """
+    This function is used to create a unique filename for each image uploaded to the server.
+    :param instance: The instance parameter is the model instance that the file is attached to.
+    :param filename: The filename parameter is the name of the file that was uploaded.
+    :return: The function returns a string containing the path where the file will be saved.
+    """
+    return os.path.join("fotos", "conejos", str(instance.pk), filename)
 
 
 # Create your models here.
@@ -45,7 +56,7 @@ class Rabbit(AbstractModel):
     weight = models.DecimalField(max_digits=3, decimal_places=1, default=1)
     photo = models.ImageField(
         "Rabbits",
-        upload_to="fotos/conejos/",
+        upload_to=get_upload_path,
         default="conejo.jpg",
         null=True,
         blank=True,

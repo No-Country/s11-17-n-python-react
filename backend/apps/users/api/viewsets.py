@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from apps.profiles.models import Profile
 from .permisssions import CreateUserPermission
 from django.contrib.auth.hashers import make_password
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 
 
 class UserViewSet(viewsets.GenericViewSet):
@@ -44,7 +44,12 @@ class UserViewSet(viewsets.GenericViewSet):
         return get_object_or_404(self.serializer_class.Meta.model, pk=pk)
 
     @action(methods=["post"], detail=True)
-    @extend_schema(description="Cambia la contraseña", summary="Users")
+    @extend_schema(
+        description="Cambia la contraseña",
+        summary="Users",
+        request=PasswordSerializer,
+        responses=None,
+    )
     def set_password(self, request, pk=None):
         """
         Change password
@@ -63,7 +68,12 @@ class UserViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    @extend_schema(description="Obtiene una colección de usuarios", summary="Users")
+    @extend_schema(
+        description="Obtiene una colección de usuarios",
+        summary="Users",
+        request=UserListSerializer,
+        responses=UserListSerializer,
+    )
     def list(self, request, *args, **kwargs):
         """
         Get a collection of users
@@ -78,7 +88,21 @@ class UserViewSet(viewsets.GenericViewSet):
         serializer = self.list_serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-    @extend_schema(description="Crea un usuario con perfil vacío", summary="Users")
+    @extend_schema(
+        description="Crea un usuario con perfil vacío",
+        summary="Users",
+        examples=[
+            OpenApiExample(
+                "Example Schema",
+                {
+                    "username": "string",
+                    "email": "user@example",
+                    "password": "string",
+                    "is_producer": "True",
+                },
+            )
+        ],
+    )
     def create(self, request):
         """
         Create an user

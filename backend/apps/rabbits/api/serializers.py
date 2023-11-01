@@ -84,3 +84,14 @@ class RabbitSerializer(serializers.ModelSerializer):
         cage.total_weight += instance.weight
         cage.save()
         return instance
+
+
+class RabbitPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rabbit
+        fields = ("photo",)
+
+    def update(self, instance, validated_data):
+        instance.photo = validated_data.get("photo", instance.photo)
+        instance.save()
+        return instance
