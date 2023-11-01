@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from apps.abstracts.models import AbstractModel
 import os
+from apps.profiles.models import Profile
 
 # Create your models here.
 
@@ -35,6 +36,9 @@ class Farm(AbstractModel):
         default="granja.jpg",
         null=True,
         blank=True,
+    )
+    profile_id = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="profile_farm"
     )
 
     # Modifica como se visualiza el nombre de la clase en el admin

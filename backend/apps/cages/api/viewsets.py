@@ -13,7 +13,7 @@ from utils.permisssions import ListAndRetrievePermission
 
 
 class CageViewSet(viewsets.ModelViewSet):
-    queryset = Cage.objects.all().order_by("-created")
+    queryset = Cage.objects.filter(is_active=True).order_by("-created",)
     serializer_class = CageSerializer
 
     # custom pagination
@@ -93,7 +93,6 @@ class CageViewSet(viewsets.ModelViewSet):
             OpenApiExample(
                 "Example Schema",
                 {
-                    "is_public": True,
                     "farm_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 },
             )
@@ -153,14 +152,21 @@ class CageViewSet(viewsets.ModelViewSet):
             )
 
     # delete cage
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(
-            {"message": "La jaula se ha eliminado correctamente."},
-            status=status.HTTP_204_NO_CONTENT,
-        )
-
+    def destroy(self, request, pk=None):
+        cage = self.serializer_class.Meta.model.objects.filter(id=pk, is_active=True).first()
+        if cage:
+            cage.is_active = False
+            cage.save()
+            return Response(
+                {"message": "Jaula eliminada correctamente"},
+                status=status.HTTP_204_NO_CONTENT,
+            )
+        else:
+            return Response(
+                {"message": "La jaula no existe o ya fue eliminada"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+            
     @extend_schema(request=CagePhotoSerializer, responses=CagePhotoSerializer)
     @action(
         detail=True, methods=["patch"], parser_classes=[MultiPartParser, FormParser]
@@ -173,3 +179,4 @@ class CageViewSet(viewsets.ModelViewSet):
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

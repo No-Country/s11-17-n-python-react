@@ -3,6 +3,8 @@ from django_filters import rest_framework
 from apps.rabbits.models import Rabbit
 from apps.cages.models import Cage
 from apps.addresses.models import Address
+from apps.farms.models import Farm
+from apps.profiles.models import Profile
 
 
 class UserFilterSet(rest_framework.FilterSet):
@@ -43,12 +45,34 @@ class CageFilterSet(rest_framework.FilterSet):
         )
         ordering = ("created",)
 
+
 class AddressFilterSet(rest_framework.FilterSet):
     class Meta:
         model = Address
+        fields = ("address", "state_id__state", "city_id__city")
+        ordering = ("created",)
+
+
+class FarmFilterSet(rest_framework.FilterSet):
+    class Meta:
+        model = Farm
         fields = (
-            'address', 
-            'state_id__state', 
-            'city_id__city'
+            "profile_id",
+            "name",
+            "address",
+            "description",
+        )
+        ordering = ("created",)
+
+
+class ProfileFilterSet(rest_framework.FilterSet):
+    class Meta:
+        model = Profile
+        fields = (
+            "user_id",
+            "first_name",
+            "last_name",
+            "is_producer",
+            "qualification",
         )
         ordering = ("created",)

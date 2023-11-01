@@ -47,7 +47,7 @@ class Rabbit(AbstractModel):
         ("Hembra", "Hembra"),
     )
 
-    cage_id = models.ForeignKey(Cage, on_delete=models.CASCADE)
+    cage_id = models.ForeignKey(Cage, on_delete=models.CASCADE, related_name="rabbits")
     breed = models.CharField(choices=BREED_CHOICE, blank=False, default="Especie")
     genre = models.CharField(choices=GENDER_CHOICE, blank=False, default="Genero")
     birthday = models.DateField(null=False, blank=False, default=timezone.now)

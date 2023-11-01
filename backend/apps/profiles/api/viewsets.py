@@ -1,43 +1,61 @@
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status, filters
 from django_filters.rest_framework import DjangoFilterBackend
-#from utils.filters import ProfileFilterSet
+
+# from utils.filters import ProfileFilterSet
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from apps.profiles.api.serializer import ProfileSerializer, ProfilePhotoSerializer
 from utils.pagination import ExtendedPagination
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status
-from drf_spectacular.utils import extend_schema
+from rest_framework import status, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from utils.filters import ProfileFilterSet
 
 
 from apps.profiles.api.serializer import ProfileSerializer
 
 
-@extend_schema_view(
-    list = extend_schema(description='permite listar los perfiles de usuario'),
-    retrieve = extend_schema(description='permite ver el perfil de un usuario'),
-    update = extend_schema(description='permite actualizar el perfil de usuario'),
-)
+class ProfileModelViewSet(ModelViewSet):
+    serializer_class = ProfileSerializer
+    pagination_class = ExtendedPagination
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    ]
+    filterset_class = ProfileFilterSet
 
+
+@extend_schema_view(
+    list=extend_schema(description="permite listar los perfiles de usuario"),
+    retrieve=extend_schema(description="permite ver el perfil de un usuario"),
+    update=extend_schema(description="permite actualizar el perfil de usuario"),
+)
 class ProfileModelViewSet(GenericViewSet):
     serializer_class = ProfileSerializer
     queryset = serializer_class.Meta.model.objects.filter(is_active=True).order_by(
-            "last_name"
-        )
-    
+        "last_name"
+    )
+
     # Paginacion personalizada
     pagination_class = ExtendedPagination
-    
+
     # Sistema de filtros
-    filter_backends = [DjangoFilterBackend,
-                        filters.SearchFilter, filters.OrderingFilter]
-    
-    #filterset_class = ProfileFilterSet
-    search_fields = ["last_name", "first_name", ]
-    
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+
+    # filterset_class = ProfileFilterSet
+    search_fields = [
+        "last_name",
+        "first_name",
+    ]
+
     # Define campos para el ordenamiento
     ordering_fields = ["first_name", "last_name", "qualification", "created"]
 
@@ -51,7 +69,7 @@ class ProfileModelViewSet(GenericViewSet):
         instance = self.get_object()
         serializer = self.serializer_class(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
     # Método 'update': Actualiza un perfil existente
     def update(self, request, pk):
         instance = self.get_object()
